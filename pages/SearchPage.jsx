@@ -1,5 +1,5 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { Dune } from "../services/Dune";
+import { Dune, DuneQueryState } from "../services/Dune";
 import { useState } from "react";
 import Dashboard from "../components/Dashboard";
 
@@ -11,21 +11,37 @@ export const SearchPage = () => {
     if (!textQuery?.length)
       return
 
+    const chartKey = textQuery.toLowerCase()
+    const chartExists = charts.find(chart => chart.key === chartKey)
+    if (chartExists?.state === DuneQueryState.PENDING || chartExists?.state === DuneQueryState.EXECUTING) {
+      console.warn("Chart execution pending, returning")
+      return
+    }
+
     const queryID = 661161
-    const { data: duneQuery, error } = await Dune.executeQuery(queryID)
+    const { data: executeResult, error } = await Dune.executeQuery(queryID)
     if (error) {
       console.error("error in Dune.executeQuery", error)
       return
     }
+    const { execution_id: executionID, state } = executeResult
 
-    setCharts([{
-        textQuery,
-        queryID,
-        executionID: duneQuery.execution_id,
-      }, ...charts])
+    const newChart = {
+      key: chartKey,
+      textQuery,
+      queryID,
+      executionID,
+      state
+    }
+    const newCharts = chartExists
+      ? charts.map(chart => chart.key === newChart.key ? newChart : chart)
+      : [newChart, ...charts]
+
+    setCharts(newCharts)
   }
 
   return <Container maxWidth="sm">
+    {!charts?.length && <Box height="40vh"></Box>}
     <Box
       sx={{
         textAlign: "center",
@@ -35,7 +51,7 @@ export const SearchPage = () => {
         alignItems: "center"
     }}>
       <Typography variant="h3">
-        Search Ethereum
+        Ask Ethereum 🧞
       </Typography>
       <TextField
         sx={{ mt: 3, width: "100%" }}
@@ -60,7 +76,7 @@ export const SearchPage = () => {
         Search
       </Button>
     </Box>
-    <Dashboard charts={charts} sx={{ mt: 2 }} />
+    <Dashboard charts={charts} setCharts={setCharts} sx={{ mt: 3 }} />
   </Container>
 }
 

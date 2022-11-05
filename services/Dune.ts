@@ -5,13 +5,12 @@ class Dune_ {
   _get = async (url: string) => {
     return axios.get(url, {
         headers: this.getHeaders()
-      })
-      .then((response) => {
-        return { data: response.data }
+      }).then((response) => {
+        return { data: response.data, error: null }
       })
       .catch((error) => {
         console.error(error);
-        return { error }
+        return { data: null, error }
       })
   }
 
@@ -21,11 +20,11 @@ class Dune_ {
       headers: this.getHeaders()
     })
       .then((response) => {
-        return { data: response.data }
+        return { data: response.data, error: null }
       })
       .catch((error) => {
         console.error(error);
-        return { error }
+        return { data: null, error }
       })
   }
 
@@ -40,19 +39,23 @@ class Dune_ {
     return result
   }
 
-  checkExecutionStatus = async (executionID: number) => {
-    const result = this._get(`https://api.dune.com/api/v1/execution/${executionID}/status`)
-    console.log(result)
-    return result
+  fetchExecutionStatus = async (executionID?: string) => {
+    if (!executionID) return
+    return this._get(`https://api.dune.com/api/v1/execution/${executionID}/status`)
   }
 
   fetchExecutionResults = async (executionID?: string) => {
     if (!executionID) return
-    const result = this._get(`https://api.dune.com/api/v1/execution/${executionID}/results`)
-    console.log(result)
-    return result
+    return await this._get(`https://api.dune.com/api/v1/execution/${executionID}/results`)
   }
-
 }
+
+
+export enum DuneQueryState {
+  PENDING = "QUERY_STATE_PENDING",
+  EXECUTING = "QUERY_STATE_EXECUTING",
+  COMPLETED = "QUERY_STATE_COMPLETED"
+}
+
 
 export const Dune = new Dune_()

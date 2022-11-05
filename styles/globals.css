@@ -23,3 +23,7 @@ a {
   transform: translate(16px, 8px) scale(1) !important;
   color: #71747A !important;
 }
+
+.grid {
+  visibility: hidden;
+}
