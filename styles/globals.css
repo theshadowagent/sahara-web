@@ -15,12 +15,11 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+
+/* should be in theme.js someday */
+.MuiInputLabel-shrink {
+  font-size: 13px !important;
+  line-height: 18px !important;
+  transform: translate(16px, 8px) scale(1) !important;
+  color: #71747A !important;
 }
