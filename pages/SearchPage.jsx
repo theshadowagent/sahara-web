@@ -8,7 +8,10 @@ import AwaitingButton, { LoadingState } from "../components/AwaitingButton";
 let textQuery
 
 export const SearchPage = () => {
-  const [queryState, setQueryState] = useState(undefined)
+  const [textQueryCache, setTextQueryCache] = useState(undefined)
+  if (textQueryCache) {
+    textQuery = textQueryCache
+  }
   const [searchRequestState, setSearchRequestState] = useState(LoadingState.NOT_STARTED)
   const [charts, setCharts] = useState([])
 
@@ -19,7 +22,7 @@ export const SearchPage = () => {
       return
     }
 
-    setQueryState(textQuery)
+    setTextQueryCache(textQuery)
     const chartKey = textQuery.toLowerCase()
     const chartExists = charts.find(chart => chart.key === chartKey)
     if (chartExists?.state === DuneQueryState.PENDING || chartExists?.state === DuneQueryState.EXECUTING) {
