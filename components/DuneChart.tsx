@@ -47,7 +47,16 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
     backgroundColor: "#fafafa",
   }}>
     <Box sx={{ paddingTop: "16px", paddingLeft: "24px", paddingRight: "24px" }}>
-      {title && <Typography variant="h6">{capitalize(title)}</Typography>}
+      {title && <Typography
+        variant="h6"
+        sx={{
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          marginRight: "50px !important"
+        }}>
+        {capitalize(title)}
+      </Typography>}
       {(subtitle && !isSQLGenerated) && <Typography variant="subtitle2" sx={{ mt: 0 }}>Showing results for <a href={`https://dune.com/queries/${queryID}`} target="_blank"><span style={{ fontWeight: 600 }}>{subtitle}</span></a></Typography>}
       {isSQLGenerated && <Typography variant="subtitle2" sx={{ mt: 0 }}><span style={{ color: "#000"}}>✨</span> AI-generated query</Typography>}
       {isSQLGenerated && !isError &&
@@ -55,7 +64,7 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
           variant="text"
           sx={{ position: "absolute", top: 16, right: 24 }}
           onClick={() => {setShowSQL(!showSQL)}}>
-          {showSQL ? "Show graph" : "SQL"}
+          {showSQL ? "Graph" : "SQL"}
         </Button>
       }
       {isLoading && <Typography variant="subtitle1" sx={{ mt: 1 }}>Loading...</Typography>}

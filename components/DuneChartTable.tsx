@@ -4,7 +4,7 @@ export const DuneChartTable = ({ columns, rows }) => {
   return (
     <DataGrid
       sx={{ mt: 3, height: "318px" }}
-      rows={rows?.map((row, index) => ({ id: index, ...row }))}
+      rows={rows?.map((row, index) => ({ id: index, ...row, width: "150px" }))}
       columns={columns?.map(c => ({ field: c, headerName: c }))}
       pageSize={4}
     />
