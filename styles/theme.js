@@ -198,6 +198,9 @@ export const theme = createTheme({
       fontSize: "1rem",
       textTransform: "none",
     },
+    h2: {
+      fontSize: "3.5rem",
+    },
     h3: {
       color: "#353535",
       fontSize: 30,

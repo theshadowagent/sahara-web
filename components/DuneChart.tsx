@@ -1,6 +1,6 @@
 import { DuneQueryState } from "../services/Dune";
 import { Box, Button, Typography } from "@mui/material";
-import { capitalize } from "./utils";
+import { capitalize, numberWithCommas } from "./utils";
 import { ChartProps } from "./Dashboard";
 import DuneChartTable from "./DuneChartTable";
 import { DuneChartLine } from "./DuneChartLine";
@@ -47,14 +47,15 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
     backgroundColor: "#fafafa",
   }}>
     <Box sx={{ paddingTop: "16px", paddingLeft: "24px", paddingRight: "24px" }}>
-      {title && <Typography
-        variant="h6"
-        sx={{
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          marginRight: "50px !important"
-        }}>
+      {title &&
+        <Typography
+          variant="h6"
+          sx={{
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            marginRight: "50px !important"
+          }}>
         {capitalize(title)}
       </Typography>}
       {(subtitle && !isSQLGenerated) && <Typography variant="subtitle2" sx={{ mt: 0 }}>Showing results for <a href={`https://dune.com/queries/${queryID}`} target="_blank"><span style={{ fontWeight: 600 }}>{subtitle}</span></a></Typography>}
@@ -78,7 +79,7 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
           mt: 1,
           ml: "24px"
         }}>
-        {Object.values(rows[0])[0]}
+        {numberWithCommas(Object.values(rows[0])[0])}
       </Typography>
     }
     {!showSQL && isChartCounter === false && renderDuneChart()}
