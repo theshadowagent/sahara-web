@@ -23,9 +23,9 @@ const searchOrGenerate = async ({ useGenerate, setSearchRequestState }) => {
 
   const { data: generateResult, error: generateError } = await API.generateDuneSQL(textQuery)
   if (generateError) {
-    console.error("error in API.generateDuneSQL", error)
+    console.error("error in API.generateDuneSQL", generateError)
     setSearchRequestState(LoadingState.ERROR)
-    return
+    return { error: generateError }
   }
   console.log("GPT-3 generated SQL:", generateResult)
   const { sql } = generateResult
@@ -33,10 +33,10 @@ const searchOrGenerate = async ({ useGenerate, setSearchRequestState }) => {
   if (error) {
     console.error("error in Dune.executeQuery", error)
     setSearchRequestState(LoadingState.ERROR)
-    return
+    return { error: generateError }
   }
   const { execution_id: executionID, state } = executeResult
-  return { executionID, state }
+  return { executionID, state, sql }
 }
 
 export const SearchPage = () => {
@@ -77,7 +77,10 @@ export const SearchPage = () => {
 
     const useGenerate = shouldUseGenerate(distance)
     console.log("useGenerate", useGenerate)
-    const { executionID, state } = await searchOrGenerate({ useGenerate, setSearchRequestState })
+    const { executionID, state, sql, error } = await searchOrGenerate({ useGenerate, setSearchRequestState })
+    if (error) {
+      return
+    }
 
     const newChart = {
       key: chartKey,
@@ -88,6 +91,7 @@ export const SearchPage = () => {
       duneTitle: name,
       type: visualization.type,
       isSQLGenerated: useGenerate,
+      sql
     }
     const newCharts = chartExists
       ? charts.map(chart => chart.key === newChart.key ? newChart : chart)

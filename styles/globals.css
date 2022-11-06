@@ -27,3 +27,15 @@ a {
 .grid {
   visibility: hidden;
 }
+
+.syntax-highlighter {
+  background: rgba(0, 0, 0, 0.06) !important;
+}
+
+.syntax-highlighter pre {
+  background: #F1F0F0 !important;
+}
+
+.syntax-highlighter code {
+  background: transparent !important;
+}
