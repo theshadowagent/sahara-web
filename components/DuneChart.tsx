@@ -79,7 +79,7 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
           mt: 1,
           ml: "24px"
         }}>
-        {numberWithCommas(Object.values(rows[0])[0])}
+        {numberWithCommas(Number(Object.values(rows[0])[0]))}
       </Typography>
     }
     {!showSQL && isChartCounter === false && renderDuneChart()}
