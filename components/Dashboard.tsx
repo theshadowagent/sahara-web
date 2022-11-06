@@ -25,7 +25,7 @@ export const Dashboard = ({ charts, setCharts, sx }) => {
       const refreshedChart = refreshedCharts.find(({ data }) => data.execution_id === c.executionID)
       return {
         ...c,
-        state: refreshedChart?.data?.state,
+        state: refreshedChart?.data?.state ?? c.state,
       }
     }))
   }

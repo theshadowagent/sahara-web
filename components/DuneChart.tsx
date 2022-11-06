@@ -16,12 +16,17 @@ interface Props {
 }
 
 export const DuneChart = ({ title, executionID, state }: Props & ChartProps) => {
-  const { isLoading: isFetchingResults, data: results, error } = useQuery([executionID, state], () => {
-    if (state === DuneQueryState.COMPLETED) {
-      console.log("fetching results for", executionID)
-      return Dune.fetchExecutionResults(executionID)
-    }
-    return null
+  const { isLoading: isFetchingResults, data: results, error } = useQuery({
+    queryKey: [executionID, state],
+    queryFn: () => {
+      if (state === DuneQueryState.COMPLETED) {
+        console.log("fetching results for", executionID)
+        return Dune.fetchExecutionResults(executionID)
+      }
+      return null
+    },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   })
   const columnNames = results?.data?.result?.metadata?.column_names
   const rows = results?.data?.result?.rows

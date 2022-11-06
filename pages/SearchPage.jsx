@@ -4,13 +4,17 @@ import { useState } from "react";
 import Dashboard from "../components/Dashboard";
 
 export const SearchPage = () => {
-  let textQuery = undefined
+  const [queryState, setQueryState] = useState(undefined)
+  let textQuery = queryState
   const [charts, setCharts] = useState([])
 
   const onSubmit = async () => {
-    if (!textQuery?.length)
+    if (!textQuery?.length) {
+      console.warn("Empty text query, return")
       return
+    }
 
+    setQueryState(textQuery)
     const chartKey = textQuery.toLowerCase()
     const chartExists = charts.find(chart => chart.key === chartKey)
     if (chartExists?.state === DuneQueryState.PENDING || chartExists?.state === DuneQueryState.EXECUTING) {
@@ -41,7 +45,7 @@ export const SearchPage = () => {
   }
 
   return <Container maxWidth="sm">
-    {!charts?.length && <Box height="40vh"></Box>}
+    {!charts?.length && <Box height="35vh"></Box>}
     <Box
       sx={{
         textAlign: "center",
