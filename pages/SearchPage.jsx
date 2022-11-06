@@ -82,7 +82,7 @@ export const SearchPage = () => {
     const newChart = {
       key: chartKey,
       textQuery,
-      queryID: useGenerate,
+      queryID,
       executionID,
       state,
       duneTitle: name,
