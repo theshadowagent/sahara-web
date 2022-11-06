@@ -9,7 +9,7 @@ let textQuery
 
 export const SearchPage = () => {
   const [textQueryCache, setTextQueryCache] = useState(undefined)
-  if (textQueryCache) {
+  if (textQueryCache && !textQuery) {
     textQuery = textQueryCache
   }
   const [searchRequestState, setSearchRequestState] = useState(LoadingState.NOT_STARTED)
