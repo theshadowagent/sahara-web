@@ -10,6 +10,8 @@ interface ChartConfig {
   elementType: ElementType
 }
 
+const MAX_RESULTS = 10000
+
 export const useChartConfig = (config: ChartConfig) => {
   const { rows, columnNames, dataType, elementType } = config
 
@@ -35,7 +37,9 @@ export const useChartConfig = (config: ChartConfig) => {
 
   const data = useMemo(() => (
       dataType === "time"
-      ? rows?.sort((a, b) => primaryAxis.getValue(a).getTime() - primaryAxis.getValue(b).getTime())
+      ? rows
+          ?.sort((a, b) => primaryAxis.getValue(a).getTime() - primaryAxis.getValue(b).getTime())
+          ?.slice(-MAX_RESULTS)
       : rows
     ), [rows, dataType])
 
