@@ -3,16 +3,19 @@ import { Dune, DuneQueryState } from "../services/Dune";
 import { useState } from "react";
 import Dashboard from "../components/Dashboard";
 import { API } from "../services/API";
+import AwaitingButton, { LoadingState } from "../components/AwaitingButton";
 
 let textQuery
 
 export const SearchPage = () => {
   const [queryState, setQueryState] = useState(undefined)
+  const [searchRequestState, setSearchRequestState] = useState(LoadingState.NOT_STARTED)
   const [charts, setCharts] = useState([])
 
   const onSubmit = async () => {
     if (!textQuery?.length) {
       console.warn("Empty text query, return")
+      setSearchRequestState(LoadingState.NOT_STARTED)
       return
     }
 
@@ -21,6 +24,7 @@ export const SearchPage = () => {
     const chartExists = charts.find(chart => chart.key === chartKey)
     if (chartExists?.state === DuneQueryState.PENDING || chartExists?.state === DuneQueryState.EXECUTING) {
       console.warn("Chart execution pending, returning")
+      setSearchRequestState(LoadingState.NOT_STARTED)
       return
     }
 
@@ -28,6 +32,7 @@ export const SearchPage = () => {
     console.log("searchResults", searchResults)
     if (!searchResults || searchError) {
       console.error("Error searching query", searchError)
+      setSearchRequestState(LoadingState.ERROR)
       return
     }
     const { results } = API.parseResultsVisualization(searchResults.results)
@@ -39,6 +44,7 @@ export const SearchPage = () => {
     const { data: executeResult, error } = await Dune.executeQuery(Number(queryID))
     if (error) {
       console.error("error in Dune.executeQuery", error)
+      setSearchRequestState(LoadingState.ERROR)
       return
     }
     const { execution_id: executionID, state } = executeResult
@@ -60,6 +66,7 @@ export const SearchPage = () => {
       : [newChart, ...charts]
 
     setCharts(newCharts)
+    setSearchRequestState(LoadingState.SUCCESS)
   }
 
   return <Container sx={{ maxWidth: "700px !important", paddingBottom: "40px" }} >
@@ -93,12 +100,15 @@ export const SearchPage = () => {
         }}
         placeholder="e.g. 1inch daily volume"
       />
-      <Button
+      <AwaitingButton
+        loadingState={searchRequestState}
+        setLoadingState={setSearchRequestState}
+        loadingText="Granting wish..."
         sx={{ mt: 3 }}
         variant="contained"
         onClick={onSubmit}>
         💫 Grant wish
-      </Button>
+      </AwaitingButton>
     </Box>
     <Dashboard charts={charts} setCharts={setCharts} sx={{ mt: 3 }} />
   </Container>
