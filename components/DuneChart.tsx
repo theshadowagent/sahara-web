@@ -1,6 +1,6 @@
 import { DuneQueryState } from "../services/Dune";
 import { Box, Button, Typography } from "@mui/material";
-import { capitalize, numberWithCommas } from "./utils";
+import { capitalize, numberWithCommas, roundTo } from "./utils";
 import { ChartProps } from "./Dashboard";
 import DuneChartTable from "./DuneChartTable";
 import { DuneChartLine } from "./DuneChartLine";
@@ -79,7 +79,7 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
           mt: 1,
           ml: "24px"
         }}>
-        {numberWithCommas(Number(Object.values(rows[0])[0]))}
+        {numberWithCommas(Number(roundTo(Object.values(rows[0])[0], 2)))}
       </Typography>
     }
     {!showSQL && isChartCounter === false && renderDuneChart()}

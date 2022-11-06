@@ -6,3 +6,7 @@ export const capitalize = (s: string) => {
 export const numberWithCommas = (x: number) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+export const roundTo = (num, digits) => {
+  return +(num).toFixed(digits)
+}
