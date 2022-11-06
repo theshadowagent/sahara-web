@@ -36,7 +36,7 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
     }
   }
 
-  const isHeightAuto = isSQLGenerated || (isChartCounter && index === 0)
+  const isHeightAuto = (isChartCounter && index === 0) || (isSQLGenerated && !isChartCounter)
 
   return <Box sx={{
     position: "relative",
