@@ -10,7 +10,7 @@ interface ChartConfig {
   elementType: ElementType
 }
 
-const MAX_RESULTS = 10000
+const MAX_RESULTS = 5000
 
 export const useChartConfig = (config: ChartConfig) => {
   const { rows, columnNames, dataType, elementType } = config
