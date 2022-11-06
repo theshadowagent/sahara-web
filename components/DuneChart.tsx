@@ -21,6 +21,7 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
 
   const isLoading = isFetchingResults || state === DuneQueryState.PENDING || state === DuneQueryState.EXECUTING
   const isError = state === DuneQueryState.FAILED || error
+  const isEmpty = rows && rows.length === 0
   console.log('isError', error, isError)
   console.log("re-rendering chart", executionID)
 
@@ -81,6 +82,7 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
       }
       {isLoading && <Typography variant="subtitle1" sx={{ mt: 1 }}>Loading...</Typography>}
       {(error && !isSQLGenerated) && <Typography variant="subtitle1" sx={{ mt: 1 }}>Error: {error?.message}</Typography>}
+      {isEmpty && <Typography variant="subtitle1" sx={{ mt: 1 }}>No results generated 😥</Typography>}
     </Box>
     {!showSQL && isChartCounter &&
       <Typography
