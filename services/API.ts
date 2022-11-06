@@ -59,6 +59,7 @@ class API_ {
         const sortedVisualizations = parsed.sort((a: any, b: any) => {
           return getPriority(b.type) - getPriority(a.type)
         })
+          .filter((v: any) => v.options.globalSeriesType !== "pie")
         console.log("sortedVisualizations", sortedVisualizations)
 
         return { ...result, visualization: sortedVisualizations[0] }
