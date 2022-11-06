@@ -44,7 +44,7 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state }
   return <Box sx={{
     borderRadius: "12px",
     minHeight: isChartCounter ? "auto" : 320,
-    height: "auto",
+    height: type === "table" ? 392 : 320,
     paddingBottom: isChartCounter ? "16px" : "0px",
     backgroundColor: "#fafafa",
   }}>
