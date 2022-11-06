@@ -40,6 +40,6 @@ a {
   background: transparent !important;
 }
 
-#react-charts-portal div:nth-child(3) {
+#react-charts-portal div:nth-child(3n) {
   display: none;
 }
