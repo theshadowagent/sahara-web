@@ -11,6 +11,7 @@ export interface ChartProps {
   queryID?: number
   duneTitle?: string
   state: DuneQueryState
+  isSQLGenerated?: boolean
 }
 
 export const Dashboard = ({ charts, setCharts, sx }) => {
@@ -37,9 +38,10 @@ export const Dashboard = ({ charts, setCharts, sx }) => {
   }, pendingCharts?.length ? 5000 : null)
 
   return <Grid container gap={3} sx={{ width: "100%", display: "flex", flexWrap: "wrap", ...sx }}>
-    {charts?.map(({ key, type, textQuery, queryID, executionID, state, duneTitle }, index) => (
+    {charts?.map(({ key, type, textQuery, queryID, executionID, state, duneTitle, isSQLGenerated }, index) => (
       <Grid key={key} item xs={index === 0 ? 12 : 5.85}>
         <DuneChart
+          isSQLGenerated={isSQLGenerated}
           index={index}
           type={type}
           key={key}

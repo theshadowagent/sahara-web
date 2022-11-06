@@ -35,6 +35,10 @@ class API_ {
     return this._get(url)
   }
 
+  generateDuneSQL = (query: string) => {
+    return this._get(`https://sahara-server.herokuapp.com/generate/?query=${query}`)
+  }
+
   parseResultsVisualization = (results: any) => {
     return {
       results: results.map((result: any) => {

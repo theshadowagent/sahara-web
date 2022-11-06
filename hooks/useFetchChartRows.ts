@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Dune, DuneQueryState } from "../services/Dune";
 
-export const useChartRowsQuery = ({ queryID, executionID, state }) => {
+export const useFetchChartRows = ({ queryID, executionID, state }) => {
   const { isLoading: isFetchingCachedResults, data: cachedResults, error: cachedError } = useQuery({
     queryKey: [queryID, executionID],
     queryFn: () => {
@@ -12,6 +12,7 @@ export const useChartRowsQuery = ({ queryID, executionID, state }) => {
             columnNames: r?.data?.columns
           }))
       }
+      return null
     },
   })
 
@@ -33,9 +34,11 @@ export const useChartRowsQuery = ({ queryID, executionID, state }) => {
     refetchOnWindowFocus: false,
   })
 
+  console.log('execution results', executionResults, executionError)
+
   return {
     isFetchingResults: isFetchingCachedResults ?? isFetchingExecutionResults,
-    results: cachedResults ?? executionResults,
-    error: cachedError ?? executionError
+    results: executionResults ?? cachedResults,
+    error: executionError ?? cachedError
   }
 }

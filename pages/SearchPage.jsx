@@ -7,6 +7,38 @@ import AwaitingButton, { LoadingState } from "../components/AwaitingButton";
 
 let textQuery
 
+const DISTANCE_THRESHOLD = 0.05
+
+const shouldUseGenerate = (distance) => {
+  return distance > DISTANCE_THRESHOLD
+}
+
+const searchOrGenerate = async ({ useGenerate, setSearchRequestState }) => {
+  if (!useGenerate) {
+    return { executionID: null, state: DuneQueryState.COMPLETED }
+  }
+
+  const queryID = Dune.getDynamicQueryID(textQuery)
+  console.log("Using dynamic query ID", queryID)
+
+  const { data: generateResult, error: generateError } = await API.generateDuneSQL(textQuery)
+  if (generateError) {
+    console.error("error in API.generateDuneSQL", error)
+    setSearchRequestState(LoadingState.ERROR)
+    return
+  }
+  console.log("GPT-3 generated SQL:", generateResult)
+  const { sql } = generateResult
+  const { data: executeResult, error } = await Dune.executeQuery(Number(queryID), sql)
+  if (error) {
+    console.error("error in Dune.executeQuery", error)
+    setSearchRequestState(LoadingState.ERROR)
+    return
+  }
+  const { execution_id: executionID, state } = executeResult
+  return { executionID, state }
+}
+
 export const SearchPage = () => {
   const [textQueryCache, setTextQueryCache] = useState(undefined)
   if (textQueryCache && !textQuery) {
@@ -39,30 +71,23 @@ export const SearchPage = () => {
       return
     }
     const { results } = API.parseResultsVisualization(searchResults.results)
-    const { query_id: queryID, name, visualization } = results[0]
+    const { query_id: queryID, name, visualization, distance } = results[0]
     console.log("visualization", visualization)
     console.log("results", results)
 
-    // const queryID = 661161
-    const { data: executeResult, error } = await Dune.executeQuery(Number(queryID))
-    if (error) {
-      console.error("error in Dune.executeQuery", error)
-      setSearchRequestState(LoadingState.ERROR)
-      return
-    }
-    const { execution_id: executionID, state } = executeResult
-
-    // TODO: don't hardcode this
-    const isQueryResultCached = true
+    const useGenerate = shouldUseGenerate(distance)
+    console.log("useGenerate", useGenerate)
+    const { executionID, state } = await searchOrGenerate({ useGenerate, setSearchRequestState })
 
     const newChart = {
       key: chartKey,
       textQuery,
-      queryID,
+      queryID: useGenerate,
       executionID,
-      state: isQueryResultCached ? DuneQueryState.COMPLETED : state,
+      state,
       duneTitle: name,
-      type: visualization.type
+      type: visualization.type,
+      isSQLGenerated: useGenerate,
     }
     const newCharts = chartExists
       ? charts.map(chart => chart.key === newChart.key ? newChart : chart)

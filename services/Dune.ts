@@ -1,6 +1,17 @@
 import axios from "axios";
 
 class Dune_ {
+  DYNAMIC_QUERY_IDS = {
+    "polygon": 1533776,
+    "dune-engine-v2": 1532655
+  }
+
+  getDynamicQueryID = (textQuery: string) => {
+    if (textQuery.includes("lens") || textQuery.includes("polygon")) {
+      return this.DYNAMIC_QUERY_IDS["polygon"]
+    }
+    return this.DYNAMIC_QUERY_IDS["dune-engine-v2"]
+  }
 
   _get = async (url: string) => {
     return axios.get(url, {
@@ -31,10 +42,14 @@ class Dune_ {
     "X-Dune-Api-Key": process.env.NEXT_PUBLIC_DUNE_API_KEY
   })
 
-  executeQuery = async (queryID: number) => {
-    const url = `https://api.dune.com/api/v1/query/${queryID}/execute`
-    const result = await this._post(url)
-    console.log('executeQuery', result)
+  executeQuery = async (queryID: number, dynamicSQL?: string) => {
+    let url = `https://api.dune.com/api/v1/query/${queryID}/execute`
+    const result = await this._post(url, dynamicSQL ? {
+      "query_parameters": {
+        "test_query": dynamicSQL
+      }
+    } : {})
+    console.log('executeQuery', result, dynamicSQL)
     return result
   }
 
@@ -93,7 +108,8 @@ class Dune_ {
 export enum DuneQueryState {
   PENDING = "QUERY_STATE_PENDING",
   EXECUTING = "QUERY_STATE_EXECUTING",
-  COMPLETED = "QUERY_STATE_COMPLETED"
+  COMPLETED = "QUERY_STATE_COMPLETED",
+  FAILED = "QUERY_STATE_FAILED"
 }
 
 
