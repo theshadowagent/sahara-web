@@ -4,7 +4,7 @@ import { useState } from "react";
 import Dashboard from "../components/Dashboard";
 
 export const SearchPage = () => {
-  const [textQuery, setTextQuery] = useState()
+  let textQuery = undefined
   const [charts, setCharts] = useState([])
 
   const onSubmit = async () => {
@@ -57,7 +57,9 @@ export const SearchPage = () => {
         sx={{ mt: 3, width: "100%" }}
         variant="filled"
         label={undefined}
-        onChange={e => setTextQuery(e.target.value)}
+        onChange={e => {
+          textQuery = e.target.value
+        }}
         InputProps={{
           sx: {
             borderRadius: "30px",

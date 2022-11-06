@@ -32,6 +32,8 @@ export const DuneChart = ({ title, executionID, state }: Props & ChartProps) => 
     dataType: "time",
     elementType: "line"
   })
+  console.log("re-rendering chart", executionID)
+
   // console.log('chart rows', rows, results)
 
   return <Box sx={{

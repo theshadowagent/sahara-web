@@ -1,5 +1,5 @@
-import { Box, Grid } from "@mui/material";
-import DuneChart  from "./DuneChart";
+import { Grid } from "@mui/material";
+import DuneChart from "./DuneChart";
 import useInterval from "@use-it/interval";
 import { Dune, DuneQueryState } from "../services/Dune";
 

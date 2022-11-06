@@ -33,9 +33,11 @@ export const useChartConfig = (config: ChartConfig) => {
     },
   ]), [columnNames, elementType])
 
-  const data = dataType === "time"
-    ? rows?.sort((a, b) => primaryAxis.getValue(a).getTime() - primaryAxis.getValue(b).getTime())
-    : rows
+  const data = useMemo(() => (
+      dataType === "time"
+      ? rows?.sort((a, b) => primaryAxis.getValue(a).getTime() - primaryAxis.getValue(b).getTime())
+      : rows
+    ), [rows, dataType])
 
   return {
     primaryAxis,
