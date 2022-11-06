@@ -38,7 +38,7 @@ export const useFetchChartRows = ({ queryID, executionID, state }) => {
 
   return {
     isFetchingResults: isFetchingCachedResults ?? isFetchingExecutionResults,
-    results: executionResults ?? cachedResults,
-    error: executionError ?? cachedError
+    results: executionID === null ? cachedResults : executionResults,
+    error: executionID === null ? cachedError as Error : executionError as Error
   }
 }

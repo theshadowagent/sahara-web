@@ -14,6 +14,7 @@ export const DuneChartLine = ({ title, rows, columns }) => {
     elementType: "line"
   })
 
+  // @ts-ignore
   return <Chart
     options={{
       data: [{
