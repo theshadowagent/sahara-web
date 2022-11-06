@@ -29,8 +29,8 @@ export const SearchPage = () => {
       console.error("Error searching query", searchError)
       return
     }
-
-    const { query_id: queryID, name } = searchResult
+    const { results } = searchResult
+    const { query_id: queryID, name } = results[0]
 
     // const queryID = 661161
     const { data: executeResult, error } = await Dune.executeQuery(Number(queryID))
