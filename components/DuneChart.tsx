@@ -13,7 +13,7 @@ interface Props {
   subtitle?: string
 }
 
-export const DuneChart = ({ type, title, subtitle, executionID, queryID, state }: Props & ChartProps) => {
+export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, index }: Props & ChartProps) => {
   const { results, error, isFetchingResults } = useChartRowsQuery({ state, queryID, executionID: null })
   const { columnNames, rows } = results ?? {}
 
@@ -31,10 +31,12 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state }
     }
   }
 
+  const isHeightAuto = isChartCounter && index === 0
+
   return <Box sx={{
     borderRadius: "12px",
     minHeight: isChartCounter ? "auto" : 320,
-    height: !isChartCounter ? (type === "table" ? 392 : 320) : "auto",
+    height: isHeightAuto ? "auto" : (type === "table" ? 392 : 320),
     paddingBottom: isChartCounter ? "16px" : "0px",
     backgroundColor: "#fafafa",
   }}>
