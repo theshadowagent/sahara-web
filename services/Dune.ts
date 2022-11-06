@@ -13,9 +13,9 @@ class Dune_ {
     return this.DYNAMIC_QUERY_IDS["dune-engine-v2"]
   }
 
-  _get = async (url: string) => {
+  _get = async (url: string, headers: any = this.getHeaders()) => {
     return axios.get(url, {
-        headers: this.getHeaders()
+        headers
       }).then((response) => {
         return { data: response.data, error: null }
       })
@@ -25,9 +25,9 @@ class Dune_ {
       })
   }
 
-  _post = async (url: string, body: any = {}) => {
+  _post = async (url: string, body: any = {}, headers: any = this.getHeaders()) => {
     return axios.post(url, body, {
-      headers: this.getHeaders()
+      headers
     })
       .then((response) => {
         return { data: response.data, error: null }
@@ -65,7 +65,7 @@ class Dune_ {
 
   fetchCachedResultID = async (queryID?: number) => {
     if (!queryID) return
-    return await this._post("https://sahara-server.herokuapp.com/proxy/", {
+    return await this._post(`${window.location.origin}/api/proxy`, {
       "operationName": "GetResult",
       "variables": {
         "query_id": queryID,
@@ -85,7 +85,7 @@ class Dune_ {
     if (resultError) {
       return { data: null, error: resultError }
     }
-    return await this._post("https://sahara-server.herokuapp.com/proxy/", {
+    return await this._post(`${window.location.origin}/api/proxy`, {
       "operationName": "FindResultDataByResult",
       "variables": {
         "result_id": resultID,
