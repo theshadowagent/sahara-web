@@ -40,11 +40,12 @@ export const DuneChart = ({ title, subtitle, executionID, queryID, state }: Prop
   })
   console.log("re-rendering chart", executionID)
 
-  // console.log('chart rows', rows, results)
+  const isChartCounter = rows ? rows?.length <= 1 : undefined
 
   return <Box sx={{
     borderRadius: "12px",
-    height: 320,
+    height: isChartCounter ? "auto" : 320,
+    paddingBottom: isChartCounter ? "16px" : "0px",
     backgroundColor: "#fafafa",
   }}>
     <Box sx={{ paddingTop: "16px", paddingLeft: "24px", paddingRight: "24px" }}>
@@ -53,7 +54,18 @@ export const DuneChart = ({ title, subtitle, executionID, queryID, state }: Prop
       {isLoading && <Typography variant="subtitle1" sx={{ mt: 1 }}>Loading...</Typography>}
       {error && <div>Error: {error?.message}</div>}
     </Box>
-    {rows &&
+    {isChartCounter &&
+      <Typography
+        variant="h2"
+        sx={{
+          fontWeight: 800,
+          mt: 1,
+          ml: "24px"
+        }}>
+        {Object.values(rows[0])[0]}
+      </Typography>
+    }
+    {isChartCounter === false &&
       <Chart
         options={{
           data: [{
