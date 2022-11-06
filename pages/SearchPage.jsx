@@ -69,8 +69,8 @@ export const SearchPage = () => {
     setSearchRequestState(LoadingState.SUCCESS)
   }
 
-  return <Container sx={{ maxWidth: "700px !important", paddingBottom: "40px" }} >
-    {!charts?.length && <Box height="35vh"></Box>}
+  return <Container sx={{ maxWidth: "700px !important", paddingTop: "40px", paddingBottom: "40px" }} >
+    {!charts?.length && <Box height="30vh"></Box>}
     <Box
       sx={{
         textAlign: "center",

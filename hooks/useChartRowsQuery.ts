@@ -7,10 +7,6 @@ export const useChartRowsQuery = ({ queryID, executionID, state }) => {
     queryFn: () => {
       if (executionID === null) {
         return Dune.fetchCachedExecutionResults(queryID)
-          .then(r => {
-            console.warn(r)
-            return r
-          })
           .then(r => ({
             rows: r?.data?.results?.map(r => r.data),
             columnNames: r?.data?.columns
