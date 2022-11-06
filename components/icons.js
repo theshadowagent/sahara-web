@@ -1,11 +1,13 @@
 import { Box } from "@mui/material";
 
 export const IonIcon = (props) => {
-    return <Box sx={{
+    return <Box
+      component="span"
+      sx={{
         ...props.sx,
-        display: "flex",
+        display: "inline-flex",
         alignItems: "center"
-    }}>
+      }}>
         {/* @ts-ignore */}
         <ion-icon
             name={props.name}
