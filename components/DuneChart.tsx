@@ -58,7 +58,18 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state, 
           }}>
         {capitalize(title)}
       </Typography>}
-      {(subtitle && !isSQLGenerated) && <Typography variant="subtitle2" sx={{ mt: 0 }}>Showing results for <a href={`https://dune.com/queries/${queryID}`} target="_blank"><span style={{ fontWeight: 600 }}>{subtitle}</span></a></Typography>}
+      {(subtitle && !isSQLGenerated) && <Typography
+        variant="subtitle2"
+        sx={{
+          mt: 0,
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          marginRight: "24px !important"
+        }}
+      >
+        Showing results for <a href={`https://dune.com/queries/${queryID}`} target="_blank"><span style={{ fontWeight: 600 }}>{subtitle}</span></a>
+      </Typography>}
       {isSQLGenerated && <Typography variant="subtitle2" sx={{ mt: 0 }}><span style={{ color: "#000"}}>✨</span> AI-generated query</Typography>}
       {isSQLGenerated && !isError &&
         <Button
