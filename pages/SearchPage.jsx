@@ -43,12 +43,15 @@ export const SearchPage = () => {
     }
     const { execution_id: executionID, state } = executeResult
 
+    // TODO: don't hardcode this
+    const isQueryResultCached = true
+
     const newChart = {
       key: chartKey,
       textQuery,
       queryID,
       executionID,
-      state,
+      state: isQueryResultCached ? DuneQueryState.COMPLETED : state,
       duneTitle: name,
       type: visualization.type
     }
@@ -91,10 +94,10 @@ export const SearchPage = () => {
         placeholder="e.g. 1inch daily volume"
       />
       <Button
-        sx={{ mt: 3, width: "min-content" }}
+        sx={{ mt: 3 }}
         variant="contained"
         onClick={onSubmit}>
-        Search
+        💫 Grant wish
       </Button>
     </Box>
     <Dashboard charts={charts} setCharts={setCharts} sx={{ mt: 3 }} />

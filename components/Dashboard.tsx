@@ -8,7 +8,7 @@ export interface ChartProps {
   type: string
   textQuery?: string
   executionID?: string
-  queryID?: string
+  queryID?: number
   duneTitle?: string
   state: DuneQueryState
 }

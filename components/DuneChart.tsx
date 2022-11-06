@@ -5,6 +5,7 @@ import { capitalize } from "./utils";
 import { ChartProps } from "./Dashboard";
 import DuneChartTable from "./DuneChartTable";
 import { DuneChartLine } from "./DuneChartLine";
+import { useChartRowsQuery } from "../hooks/useChartRowsQuery";
 
 interface Props {
   index: number
@@ -13,20 +14,9 @@ interface Props {
 }
 
 export const DuneChart = ({ type, title, subtitle, executionID, queryID, state }: Props & ChartProps) => {
-  const { isLoading: isFetchingResults, data: results, error } = useQuery({
-    queryKey: [executionID, state],
-    queryFn: () => {
-      if (state === DuneQueryState.COMPLETED) {
-        console.log("fetching results for", executionID)
-        return Dune.fetchExecutionResults(executionID)
-      }
-      return null
-    },
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  })
-  const columnNames = results?.data?.result?.metadata?.column_names
-  const rows = results?.data?.result?.rows
+  const { results, error, isFetchingResults } = useChartRowsQuery({ state, queryID, executionID: null })
+  const { columnNames, rows } = results ?? {}
+
   const isLoading = isFetchingResults || state === DuneQueryState.PENDING || state === DuneQueryState.EXECUTING
   console.log("re-rendering chart", executionID)
 
@@ -44,7 +34,7 @@ export const DuneChart = ({ type, title, subtitle, executionID, queryID, state }
   return <Box sx={{
     borderRadius: "12px",
     minHeight: isChartCounter ? "auto" : 320,
-    height: type === "table" ? 392 : 320,
+    height: !isChartCounter ? (type === "table" ? 392 : 320) : "auto",
     paddingBottom: isChartCounter ? "16px" : "0px",
     backgroundColor: "#fafafa",
   }}>
