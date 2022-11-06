@@ -8,7 +8,7 @@ import IonIcon from "../components/icons";
 
 let textQuery
 
-const DISTANCE_THRESHOLD = 0.09
+const DISTANCE_THRESHOLD = 0.12
 
 const shouldUseGenerate = (distance) => {
   return distance > DISTANCE_THRESHOLD
