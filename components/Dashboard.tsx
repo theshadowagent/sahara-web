@@ -34,7 +34,7 @@ export const Dashboard = ({ charts, setCharts, sx }) => {
 
   useInterval(() => {
     refreshChartsStates()
-  }, pendingCharts?.length ? 3000 : null)
+  }, pendingCharts?.length ? 5000 : null)
 
   return <Grid container gap={3} sx={{ width: "100%", display: "flex", flexWrap: "wrap", ...sx }}>
     {charts?.map(({ key, type, textQuery, queryID, executionID, state, duneTitle }, index) => (
