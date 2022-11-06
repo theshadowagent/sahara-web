@@ -4,6 +4,7 @@ import { useState } from "react";
 import Dashboard from "../components/Dashboard";
 import { API } from "../services/API";
 import AwaitingButton, { LoadingState } from "../components/AwaitingButton";
+import IonIcon from "../components/icons";
 
 let textQuery
 
@@ -122,6 +123,18 @@ export const SearchPage = () => {
           textQuery = e.target.value
         }}
         InputProps={{
+          startAdornment:
+            <IonIcon
+              sx={{
+                ml: 4,
+                mr: 0,
+                pr: 0,
+                width: 18,
+                height: 18,
+                color: "rgba(0, 0, 0, 0.40)",
+                strokeWidth: "1px"
+              }}
+              name="search" />,
           sx: {
             borderRadius: "30px",
             "input": {
@@ -130,7 +143,7 @@ export const SearchPage = () => {
             }
           }
         }}
-        placeholder="e.g. 1inch daily volume"
+        placeholder="e.g. ETH daily price"
       />
       <AwaitingButton
         loadingState={searchRequestState}
