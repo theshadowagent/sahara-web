@@ -62,7 +62,7 @@ export const SearchPage = () => {
     setCharts(newCharts)
   }
 
-  return <Container sx={{ maxWidth: "700px !important" }} >
+  return <Container sx={{ maxWidth: "700px !important", paddingBottom: "40px" }} >
     {!charts?.length && <Box height="35vh"></Box>}
     <Box
       sx={{

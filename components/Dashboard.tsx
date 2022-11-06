@@ -38,7 +38,7 @@ export const Dashboard = ({ charts, setCharts, sx }) => {
 
   return <Grid container gap={3} sx={{ width: "100%", display: "flex", flexWrap: "wrap", ...sx }}>
     {charts?.map(({ key, type, textQuery, queryID, executionID, state, duneTitle }, index) => (
-      <Grid key={key} item xs={index === 0 ? 12 : 6}>
+      <Grid key={key} item xs={index === 0 ? 12 : 5.85}>
         <DuneChart
           index={index}
           type={type}
