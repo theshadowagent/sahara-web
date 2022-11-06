@@ -3,12 +3,8 @@ import { Dune, DuneQueryState } from "../services/Dune";
 import { Box, Typography } from "@mui/material";
 import { capitalize } from "./utils";
 import { ChartProps } from "./Dashboard";
-import dynamic from "next/dynamic";
-import { useChartConfig } from "../hooks/useChartConfig";
-
-const Chart = dynamic(() => import("react-charts").then((mod) => mod.Chart), {
-  ssr: false,
-});
+import DuneChartTable from "./DuneChartTable";
+import { DuneChartLine } from "./DuneChartLine";
 
 interface Props {
   index: number
@@ -16,7 +12,7 @@ interface Props {
   subtitle?: string
 }
 
-export const DuneChart = ({ title, subtitle, executionID, queryID, state }: Props & ChartProps) => {
+export const DuneChart = ({ type, title, subtitle, executionID, queryID, state }: Props & ChartProps) => {
   const { isLoading: isFetchingResults, data: results, error } = useQuery({
     queryKey: [executionID, state],
     queryFn: () => {
@@ -32,19 +28,23 @@ export const DuneChart = ({ title, subtitle, executionID, queryID, state }: Prop
   const columnNames = results?.data?.result?.metadata?.column_names
   const rows = results?.data?.result?.rows
   const isLoading = isFetchingResults || state === DuneQueryState.PENDING || state === DuneQueryState.EXECUTING
-  const { primaryAxis, secondaryAxes, data } = useChartConfig({
-    rows,
-    columnNames,
-    dataType: "time",
-    elementType: "line"
-  })
   console.log("re-rendering chart", executionID)
 
   const isChartCounter = rows ? rows?.length <= 1 : undefined
 
+  const renderDuneChart = () => {
+    switch (type) {
+      case "table":
+        return <DuneChartTable columns={columnNames} rows={rows} />
+      default:
+        return <DuneChartLine columns={columnNames} rows={rows} title={title} />
+    }
+  }
+
   return <Box sx={{
     borderRadius: "12px",
-    height: isChartCounter ? "auto" : 320,
+    minHeight: isChartCounter ? "auto" : 320,
+    height: "auto",
     paddingBottom: isChartCounter ? "16px" : "0px",
     backgroundColor: "#fafafa",
   }}>
@@ -65,26 +65,7 @@ export const DuneChart = ({ title, subtitle, executionID, queryID, state }: Prop
         {Object.values(rows[0])[0]}
       </Typography>
     }
-    {isChartCounter === false &&
-      <Chart
-        options={{
-          data: [{
-            label: capitalize(title),
-            data
-          }],
-          primaryAxis,
-          secondaryAxes,
-          padding: {
-            bottom: 64,
-            top: 16,
-            left: 24,
-            right: 24
-          },
-          initialWidth: 500,
-          initialHeight: 280,
-          defaultColors: ["#E0694A"],
-        }}
-      />}
+    {isChartCounter === false && renderDuneChart()}
   </Box>
 }
 

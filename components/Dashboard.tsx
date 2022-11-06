@@ -5,6 +5,7 @@ import { Dune, DuneQueryState } from "../services/Dune";
 
 export interface ChartProps {
   key: string
+  type: string
   textQuery?: string
   executionID?: string
   queryID?: string
@@ -36,10 +37,11 @@ export const Dashboard = ({ charts, setCharts, sx }) => {
   }, pendingCharts?.length ? 3000 : null)
 
   return <Grid container gap={3} sx={{ width: "100%", display: "flex", flexWrap: "wrap", ...sx }}>
-    {charts?.map(({ key, textQuery, queryID, executionID, state, duneTitle }, index) => (
+    {charts?.map(({ key, type, textQuery, queryID, executionID, state, duneTitle }, index) => (
       <Grid key={key} item xs={index === 0 ? 12 : 6}>
         <DuneChart
           index={index}
+          type={type}
           key={key}
           title={textQuery}
           subtitle={duneTitle}

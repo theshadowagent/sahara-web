@@ -4,9 +4,10 @@ import { useState } from "react";
 import Dashboard from "../components/Dashboard";
 import { API } from "../services/API";
 
+let textQuery
+
 export const SearchPage = () => {
   const [queryState, setQueryState] = useState(undefined)
-  let textQuery = queryState
   const [charts, setCharts] = useState([])
 
   const onSubmit = async () => {
@@ -23,14 +24,16 @@ export const SearchPage = () => {
       return
     }
 
-    const { data: searchResult, error: searchError } = await API.searchDuneQuery(textQuery)
-    console.log("searchResult", searchResult)
-    if (!searchResult || searchError) {
+    const { data: searchResults, error: searchError } = await API.searchDuneQuery(textQuery)
+    console.log("searchResults", searchResults)
+    if (!searchResults || searchError) {
       console.error("Error searching query", searchError)
       return
     }
-    const { results } = searchResult
-    const { query_id: queryID, name } = results[0]
+    const { results } = API.parseResultsVisualization(searchResults.results)
+    const { query_id: queryID, name, visualization } = results[0]
+    console.log("visualization", visualization)
+    console.log("results", results)
 
     // const queryID = 661161
     const { data: executeResult, error } = await Dune.executeQuery(Number(queryID))
@@ -46,7 +49,8 @@ export const SearchPage = () => {
       queryID,
       executionID,
       state,
-      duneTitle: name
+      duneTitle: name,
+      type: visualization.type
     }
     const newCharts = chartExists
       ? charts.map(chart => chart.key === newChart.key ? newChart : chart)
@@ -55,7 +59,7 @@ export const SearchPage = () => {
     setCharts(newCharts)
   }
 
-  return <Container maxWidth={!charts?.length > 2 ? "md" : "sm"}>
+  return <Container sx={{ maxWidth: "700px !important" }} >
     {!charts?.length && <Box height="35vh"></Box>}
     <Box
       sx={{
