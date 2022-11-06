@@ -20,7 +20,7 @@ export const CodeBlock = ({ code, language, sx = {}, showCopy = true }) => {
         }}
         sx={{
           fontSize: "14px",
-          backgroundColor: "rgba(0, 0, 0, 0.1)",
+          backgroundColor: "#D3D3D4",
           color: "rgba(0, 0, 0, 0.54)",
           position: "absolute",
           right: 12,

@@ -29,7 +29,7 @@ export const useChartConfig = (config: ChartConfig) => {
   const secondaryAxes = useMemo(() => ([
     {
       getValue: datum => {
-        return datum[columnNames[1]]
+        return datum[columnNames[1]] ? datum[columnNames[1]] : 0
       },
       type: elementType
     },
