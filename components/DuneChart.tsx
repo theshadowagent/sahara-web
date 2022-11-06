@@ -13,9 +13,10 @@ const Chart = dynamic(() => import("react-charts").then((mod) => mod.Chart), {
 interface Props {
   index: number
   title?: string
+  subtitle?: string
 }
 
-export const DuneChart = ({ title, executionID, state }: Props & ChartProps) => {
+export const DuneChart = ({ title, subtitle, executionID, queryID, state }: Props & ChartProps) => {
   const { isLoading: isFetchingResults, data: results, error } = useQuery({
     queryKey: [executionID, state],
     queryFn: () => {
@@ -43,11 +44,12 @@ export const DuneChart = ({ title, executionID, state }: Props & ChartProps) => 
 
   return <Box sx={{
     borderRadius: "12px",
-    height: 300,
+    height: 320,
     backgroundColor: "#fafafa",
   }}>
     <Box sx={{ paddingTop: "16px", paddingLeft: "24px", paddingRight: "24px" }}>
       {title && <Typography variant="h6">{capitalize(title)}</Typography>}
+      {subtitle && <Typography variant="subtitle2" sx={{ mt: 0 }}>Showing results for <a href={`https://dune.com/queries/${queryID}`} target="_blank"><span style={{ fontWeight: 600 }}>{subtitle}</span></a></Typography>}
       {isLoading && <Typography variant="subtitle1" sx={{ mt: 1 }}>Loading...</Typography>}
       {error && <div>Error: {error?.message}</div>}
     </Box>
@@ -61,7 +63,7 @@ export const DuneChart = ({ title, executionID, state }: Props & ChartProps) => 
           primaryAxis,
           secondaryAxes,
           padding: {
-            bottom: 48,
+            bottom: 64,
             top: 16,
             left: 24,
             right: 24

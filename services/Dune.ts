@@ -15,7 +15,6 @@ class Dune_ {
   }
 
   _post = async (url: string) => {
-    console.log("headers", this.getHeaders())
     return axios.post(url, {}, {
       headers: this.getHeaders()
     })

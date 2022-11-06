@@ -8,6 +8,7 @@ export interface ChartProps {
   textQuery?: string
   executionID?: string
   queryID?: string
+  duneTitle?: string
   state: DuneQueryState
 }
 
@@ -32,12 +33,19 @@ export const Dashboard = ({ charts, setCharts, sx }) => {
 
   useInterval(() => {
     refreshChartsStates()
-  }, pendingCharts?.length ? 2000 : null)
+  }, pendingCharts?.length ? 3000 : null)
 
   return <Grid container gap={3} sx={{ width: "100%", display: "flex", flexWrap: "wrap", ...sx }}>
-    {charts?.map(({ key, textQuery, executionID, state }, index) => (
+    {charts?.map(({ key, textQuery, queryID, executionID, state, duneTitle }, index) => (
       <Grid key={key} item xs={index === 0 ? 12 : 6}>
-        <DuneChart key={key} title={textQuery} executionID={executionID} state={state} />
+        <DuneChart
+          index={index}
+          key={key}
+          title={textQuery}
+          subtitle={duneTitle}
+          queryID={queryID}
+          executionID={executionID}
+          state={state} />
       </Grid>
     ))}
   </Grid>

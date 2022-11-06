@@ -2,6 +2,7 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { Dune, DuneQueryState } from "../services/Dune";
 import { useState } from "react";
 import Dashboard from "../components/Dashboard";
+import { API } from "../services/API";
 
 export const SearchPage = () => {
   const [queryState, setQueryState] = useState(undefined)
@@ -22,8 +23,17 @@ export const SearchPage = () => {
       return
     }
 
-    const queryID = 661161
-    const { data: executeResult, error } = await Dune.executeQuery(queryID)
+    const { data: searchResult, error: searchError } = await API.searchDuneQuery(textQuery)
+    console.log("searchResult", searchResult)
+    if (!searchResult || searchError) {
+      console.error("Error searching query", searchError)
+      return
+    }
+
+    const { query_id: queryID, name } = searchResult
+
+    // const queryID = 661161
+    const { data: executeResult, error } = await Dune.executeQuery(Number(queryID))
     if (error) {
       console.error("error in Dune.executeQuery", error)
       return
@@ -35,7 +45,8 @@ export const SearchPage = () => {
       textQuery,
       queryID,
       executionID,
-      state
+      state,
+      duneTitle: name
     }
     const newCharts = chartExists
       ? charts.map(chart => chart.key === newChart.key ? newChart : chart)
@@ -44,7 +55,7 @@ export const SearchPage = () => {
     setCharts(newCharts)
   }
 
-  return <Container maxWidth="sm">
+  return <Container maxWidth={!charts?.length > 2 ? "md" : "sm"}>
     {!charts?.length && <Box height="35vh"></Box>}
     <Box
       sx={{
