@@ -7,16 +7,24 @@ export const useFetchChartRows = ({ queryID, executionID, state }) => {
     queryFn: () => {
       if (executionID === null) {
         return Dune.fetchCachedExecutionResults(queryID)
-          .then(r => ({
-            rows: r?.data?.results?.map(r => r.data),
-            columnNames: r?.data?.columns
-          }))
+          .then(({ data, error }) => {
+            if (error) {
+              throw new Error(error)
+            }
+            if (!data) {
+              throw new Error("Error in fetchCachedExecutionResults: empty data")
+            }
+            return {
+              rows: data?.results?.map(r => r?.data),
+              columnNames: data?.columns
+            }
+        })
       }
       return null
     },
   })
 
-  console.log('cached execution results', cachedResults)
+  console.log('cached execution results', cachedResults, cachedError)
 
   const { isLoading: isFetchingExecutionResults, data: executionResults, error: executionError } = useQuery({
     queryKey: [executionID, state],
@@ -35,6 +43,7 @@ export const useFetchChartRows = ({ queryID, executionID, state }) => {
   })
 
   console.log('execution results', executionResults, executionError)
+  console.log('executionID, error', executionID, executionID === null ? cachedError : executionError)
 
   return {
     isFetchingResults: isFetchingCachedResults ?? isFetchingExecutionResults,
