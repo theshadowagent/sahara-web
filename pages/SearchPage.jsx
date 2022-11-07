@@ -9,8 +9,12 @@ import IonIcon from "../components/icons";
 let textQuery
 
 const DISTANCE_THRESHOLD = 0.12
+const DISTANCE_THRESHOLD_LOWER = 0.09
 
-const shouldUseGenerate = (distance) => {
+const shouldUseGenerate = (distance, textQuery) => {
+  if (textQuery?.toLowerCase()?.includes("lens ")) {
+      return distance > DISTANCE_THRESHOLD_LOWER
+  }
   return distance > DISTANCE_THRESHOLD
 }
 
@@ -76,7 +80,7 @@ export const SearchPage = () => {
     console.log("visualization", visualization)
     console.log("results", results)
 
-    const useGenerate = shouldUseGenerate(distance)
+    const useGenerate = shouldUseGenerate(distance, textQuery)
     console.log("useGenerate", useGenerate)
     const { executionID, state, sql, error } = await searchOrGenerate({ useGenerate, setSearchRequestState })
     if (error) {
